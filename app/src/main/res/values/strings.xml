@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">CoolEvents</string>
+    <string name="januari">Januari</string>
+    <string name="februari">Februari</string>
+    <string name="maart">Maart</string>
+    <string name="april">April</string>
+    <string name="mei">Mei</string>
+    <string name="juni">Juni</string>
+    <string name="juli">Juli</string>
+    <string name="augustus">Augustus</string>
+    <string name="september">September</string>
+    <string name="oktober">Oktober</string>
+    <string name="november">November</string>
+    <string name="december">December</string>
+    <string name="toevoegen">Toevoegen</string>
+    <string name="voegEventToe">Voeg event toe</string>
+    <string name="organisator">Organisator</string>
+    <string name="titel">Titel</string>
+    <string name="datum">Datum</string>
+    <string name="plaats">Plaats</string>
+    <string name="eventType">Event type</string>
+    <string name="status">Status</string>
+    <string name="wegmoeilijkheden">Wegmoeilijkheden</string>
+    <string name="cancel">Annuleren</string>
+    <string name="save">Opslaan</string>
+
+</resources>
