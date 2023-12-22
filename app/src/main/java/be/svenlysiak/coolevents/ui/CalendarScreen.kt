@@ -1,4 +1,4 @@
-package be.svenlysiak.coolevents.ui.theme
+package be.svenlysiak.coolevents.ui
 
 import android.icu.util.Calendar
 import android.widget.CalendarView
@@ -16,6 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import be.svenlysiak.coolevents.R
+import be.svenlysiak.coolevents.data.MyConfiguration
+import be.svenlysiak.coolevents.data.UserRepository
 import be.svenlysiak.coolevents.utils.DetailText
 
 
@@ -80,6 +82,7 @@ fun CalendarScreen(modifier: Modifier = Modifier) {
             Text(stringResource(R.string.toevoegen))
         }
     }
+    Text(MyConfiguration.loggedInUser?.username.toString())
 }
 
 fun CalendarView() {

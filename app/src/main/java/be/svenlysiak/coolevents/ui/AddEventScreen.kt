@@ -1,4 +1,4 @@
-package be.svenlysiak.coolevents.ui.theme
+package be.svenlysiak.coolevents.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -25,13 +23,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import be.svenlysiak.coolevents.R
 import be.svenlysiak.coolevents.models.Event
-import be.svenlysiak.coolevents.models.User
+import be.svenlysiak.coolevents.data.User
 import be.svenlysiak.coolevents.utils.DetailText
 import be.svenlysiak.coolevents.utils.MockupUser
 import java.util.Date
 
 @Composable
-fun AddEventScreen(modifier: Modifier = Modifier) {
+fun AddEventScreen(
+    modifier: Modifier = Modifier,
+    onCancelClicked: () -> Unit,
+    onSaveCLicked: () -> Unit
+) {
     var organisator by remember { mutableStateOf("")}
     var titel by remember { mutableStateOf("")}
     var plaats by remember {mutableStateOf ("")}
@@ -78,7 +80,7 @@ fun DropdownListUser() {
     }
     Column {
         TextField(
-            value = user?.userName ?: "",
+            value = user?.username ?: "",
             label = {Text(stringResource(R.string.organisator))},
             onValueChange = {
                 expanded = true
@@ -90,14 +92,14 @@ fun DropdownListUser() {
                 .padding(top = 5.dp)
                 .fillMaxWidth()
         )
-        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+        /*DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             for (u in users) {
-                DropdownMenuItem(text = { Text(u.userName) }, onClick = {
+                DropdownMenuItem(text = { Text(u.username) }, onClick = {
                     user = u
                     expanded = false
                 })
             }
-        }
+        }*/
     }
 }
 @OptIn(ExperimentalMaterial3Api::class)

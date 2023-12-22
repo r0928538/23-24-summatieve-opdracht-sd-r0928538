@@ -23,5 +23,18 @@
     <string name="wegmoeilijkheden">Wegmoeilijkheden</string>
     <string name="cancel">Annuleren</string>
     <string name="save">Opslaan</string>
+    <string name="login">Log in</string>
+    <string name="newuser">Nieuwe gebruiker</string>
+    <string name="logintitle">Inloggen</string>
+    <string name="username">Gebruikersnaam</string>
+    <string name="password">Wachtwoord</string>
+    <string name="calendar">Kalender</string>
+    <string name="addevent">Voeg event toe</string>
+    <string name="proposed">Voorgesteld</string>
+    <string name="back_button">X</string>
+    <string name="loginasguest">Inloggen overslaan</string>
+    <string name="registrationfailure">Registratie niet gelukt.</string>
+    <string name="ok">Ok</string>
+    <string name="registrationsuccess">Registratie voltooid.\nLog in met uw aangemaakte user.</string>
 
 </resources>
