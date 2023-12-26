@@ -36,11 +36,14 @@ class CalendarDetailSharedViewModel : ViewModel() {
                 val eventList = ArrayList<Event>()
                 val readingFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
                 for (event in eventModelList) {
-                    eventList.add(Event(event.eventType, event.status, event.owner,
+                    val eventStartDateToDate = LocalDate.parse(event.startDateTime.substring(0, 10), readingFormatter)
+                    if(eventStartDateToDate >= LocalDate.now())
+                    eventList.add(Event(event.recurrencePattern.toString().split("duur").first(),
+                        event.eventType, event.status, event.owner,
                         event.description.trim(),
-                        LocalDate.parse(event.startDateTime.substring(0, 10), readingFormatter),
+                        eventStartDateToDate,
                         LocalDate.parse(event.endDateTime.substring(0, 10), readingFormatter), event.importantHindrance,
-                        event.cities
+                        event.cities.toString().replace("[", "").replace("]", "")
                     ))
                 }
                 _uistate.update {

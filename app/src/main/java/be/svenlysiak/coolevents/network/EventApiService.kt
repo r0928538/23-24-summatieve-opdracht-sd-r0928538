@@ -25,6 +25,7 @@ object EventApi {
 }
 
 interface EventApiService {
-    @GET("ws/v1/manifestation/")
+    @GET("ws/v1/manifestation?eventType=Feest/Kermis&limit=1000")
     suspend fun getEventList(): List<EventModel>
 }
+

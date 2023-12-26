@@ -38,5 +38,6 @@
     <string name="registrationsuccess">Registratie voltooid.\nLog in met uw aangemaakte user.</string>
     <string name="welcome">"Hallo, "</string>
     <string name="notloggedin">Niet ingelogd.</string>
+    <string name="description">"Omschrijving: "</string>
 
 </resources>

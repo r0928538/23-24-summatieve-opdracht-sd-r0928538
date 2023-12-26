@@ -13,6 +13,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -78,7 +79,7 @@ fun EventState(listEventViewModel: CalendarDetailSharedViewModel, modifier : Mod
     val uiState by listEventViewModel.uistate.collectAsState()
     when (uiState.apiState) {
         is EventApiState.Loading -> Text("Bezig met laden...")
-        is EventApiState.Success -> EventList2(events = (uiState.apiState as EventApiState.Success).eventsSuccess)
+        is EventApiState.Success -> ListEvents(events = (uiState.apiState as EventApiState.Success).eventsSuccess)
         is EventApiState.Error -> Text("Error tijdens ophalen van data")
     }
 
@@ -95,20 +96,21 @@ fun ListEvents(events: List<Event>) {
 
 @Composable
 fun EventCard(event: Event, modifier: Modifier = Modifier) {
-    Card(modifier = modifier) {
+    Card(modifier = modifier
+        .height(180.dp)) {
         Row(
             Modifier
                 .fillMaxWidth()
                 .padding(5.dp)) {
-            Text("#${event.startDateTime}", modifier = Modifier
+            Text("${event.startDateTime}", modifier = Modifier
                 .padding(5.dp)
-                .weight(1f))
+                .weight(4f))
             Column(
                 Modifier
-                    .padding(5.dp)
                     .weight(10f)) {
-                Text(event.description)
-                Text(text = "${event.cities}", modifier = modifier.fillMaxWidth() )
+                Text(text ="${event.cities}", modifier = modifier.fillMaxWidth() )
+                Divider()
+                Text(stringResource(R.string.description) + event.description)
             }
         }
 
@@ -117,14 +119,13 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
 
 @Composable
 fun EventList2 (events: List<Event>, modifier: Modifier = Modifier){
-    /*LazyColumn() {
+    LazyColumn() {
         if (events.isNotEmpty()) {
             items(events.size) { index ->
                 EventRow(event = events[index])
             }
         }
-    }*/
-    Text(events.size.toString())
+    }
 }
 
 @Composable
@@ -138,8 +139,9 @@ fun EventRow(event: Event, modifier: Modifier = Modifier) {
         Column(
             Modifier
                 .padding(5.dp)){
-            Text(event.description)
             Text(text = "${event.cities}", modifier = modifier.fillMaxWidth() )
+            Divider()
+            Text(stringResource(R.string.description) + event.description)
         }
     }
 }

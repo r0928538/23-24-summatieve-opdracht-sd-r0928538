@@ -3,6 +3,7 @@ package be.svenlysiak.coolevents.models
 import java.time.LocalDate
 
 data class Event(
+    val recurrencePattern: String?,
     val eventType: String,
     val status: String,
     val owner: String,
@@ -10,5 +11,5 @@ data class Event(
     val startDateTime: LocalDate,
     val endDateTime: LocalDate,
     val importantHindrance: Boolean,
-    val cities: List<String>,
+    val cities: String
 )
