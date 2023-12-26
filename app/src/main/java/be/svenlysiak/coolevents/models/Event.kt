@@ -1,9 +1,14 @@
 package be.svenlysiak.coolevents.models
 
-import java.util.Date
+import java.time.LocalDate
 
 data class Event(
-    var organisator: String, var titel: String, var datum: Date, var plaats: String,
-    var eventType: String, var status: String, var wegmoelijkheden: Boolean)  {
-    constructor(): this("", "", Date(),"","","",false)
-}
+    val eventType: String,
+    val status: String,
+    val owner: String,
+    val description: String,
+    val startDateTime: LocalDate,
+    val endDateTime: LocalDate,
+    val importantHindrance: Boolean,
+    val cities: List<String>,
+)

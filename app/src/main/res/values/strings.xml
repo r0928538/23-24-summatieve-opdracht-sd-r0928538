@@ -36,5 +36,7 @@
     <string name="registrationfailure">Registratie niet gelukt.</string>
     <string name="ok">Ok</string>
     <string name="registrationsuccess">Registratie voltooid.\nLog in met uw aangemaakte user.</string>
+    <string name="welcome">"Hallo, "</string>
+    <string name="notloggedin">Niet ingelogd.</string>
 
 </resources>

@@ -41,9 +41,9 @@ fun AddEventScreen(
     var status by remember {mutableStateOf ("")}
     var wegmoeilijkheden by remember {mutableStateOf (false)}
     //ToDo -> not statefull -> when recomposition happens, a new ToDO object is created with the entered fields
-    var event =
+    /*var event =
         Event(organisator, titel, Date(), plaats, eventType, status, wegmoeilijkheden)
-
+*/
     Column(modifier = Modifier
         .verticalScroll(rememberScrollState())
         .padding(10.dp)) {
@@ -64,7 +64,7 @@ fun AddEventScreen(
         SingleLineEditField(eventType, {eventType = it}, label = stringResource(id = R.string.eventType))
         SingleLineEditField(status, {status = it}, label = stringResource(id = R.string.status))
         EditSwitch(text = stringResource(R.string.wegmoeilijkheden), checked = wegmoeilijkheden, onValueChange = {wegmoeilijkheden = it})
-        SaveCancelButton(event = event)
+        //SaveCancelButton(event = event)
     }
 }
 

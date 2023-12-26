@@ -33,6 +33,9 @@ object AppViewModelProvider {
         initializer {
             LoginViewModel(eventsApplication().container.userRepository)
         }
+        initializer {
+            CalendarDetailSharedViewModel()
+        }
 }
 
 
