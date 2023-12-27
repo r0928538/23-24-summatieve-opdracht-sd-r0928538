@@ -14,7 +14,7 @@
     <string name="december">December</string>
     <string name="toevoegen">Toevoegen</string>
     <string name="voegEventToe">Voeg event toe</string>
-    <string name="organisator">Organisator</string>
+    <string name="organisator">"Organisator: "</string>
     <string name="titel">Titel</string>
     <string name="datum">Datum</string>
     <string name="plaats">Plaats</string>
@@ -39,5 +39,13 @@
     <string name="welcome">"Hallo, "</string>
     <string name="notloggedin">Niet ingelogd.</string>
     <string name="description">"Omschrijving: "</string>
+    <string name="detail">Detail</string>
+    <string name="eventStatus">"Status: "</string>
+    <string name="loading">Bezig met laden...</string>
+    <string name="dataerror">Error tijdens ophalen van data</string>
+    <string name="to">" tot "</string>
+    <string name="hindrance">"Wegmoeilijkheden: "</string>
+    <string name="yes">ja</string>
+    <string name="no">nee</string>
 
 </resources>

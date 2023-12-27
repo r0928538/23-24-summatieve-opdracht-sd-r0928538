@@ -1,17 +1,14 @@
 package be.svenlysiak.coolevents.ui
 
 import android.icu.util.Calendar
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
@@ -21,7 +18,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import be.svenlysiak.coolevents.R
 import be.svenlysiak.coolevents.data.EventApiState
 import be.svenlysiak.coolevents.data.MyConfiguration
@@ -30,14 +26,22 @@ import be.svenlysiak.coolevents.utils.DetailText
 
 
 @Composable
-fun CalendarScreen(listEventViewModel: CalendarDetailSharedViewModel = viewModel(factory = AppViewModelProvider.Factory), modifier: Modifier = Modifier) {
-    EventState(listEventViewModel = listEventViewModel)
+fun CalendarScreen(listEventViewModel: EventListViewModel,
+                   modifier: Modifier = Modifier, onclick: (Event) -> Unit) {
+    Column {
+        TodayDateText()
+        WhoLoggedInText()
+        EventState(listEventViewModel = listEventViewModel, modifier, onclick)
+
+    }
 }
 
 @Composable
 fun WhoLoggedInText(modifier : Modifier = Modifier){
     Row( modifier = modifier
-        .fillMaxWidth()){
+        .fillMaxWidth()
+        .padding(start = 10.dp, top = 0.dp, end = 0.dp, bottom = 0.dp)
+        ){
         if(MyConfiguration.loggedInUser!=null){
             Text(stringResource(R.string.welcome) + MyConfiguration.loggedInUser?.username.toString())
         }
@@ -49,11 +53,11 @@ fun WhoLoggedInText(modifier : Modifier = Modifier){
 
 @Composable
 fun TodayDateText(modifier : Modifier = Modifier){
-    Row() {
+    Row {
         val cal: Calendar = Calendar.getInstance()
-        var today = "";
-        today += cal.get(Calendar.DAY_OF_MONTH);
-        today += " ";
+        var today = ""
+        today += cal.get(Calendar.DAY_OF_MONTH)
+        today += " "
         when (cal.get(Calendar.MONTH) + 1) {
             1 -> today += (stringResource(R.string.januari))
             2 -> today += (stringResource(R.string.februari))
@@ -68,28 +72,32 @@ fun TodayDateText(modifier : Modifier = Modifier){
             11 -> today += (stringResource(R.string.november))
             12 -> today += (stringResource(R.string.december))
         }
-        today += " ";
-        today += cal.get(Calendar.YEAR);
+        today += " "
+        today += cal.get(Calendar.YEAR)
         DetailText(text = today)
     }
 }
 
 @Composable
-fun EventState(listEventViewModel: CalendarDetailSharedViewModel, modifier : Modifier = Modifier) {
+fun EventState(listEventViewModel: EventListViewModel, modifier : Modifier = Modifier, onclick: (Event) -> Unit) {
     val uiState by listEventViewModel.uistate.collectAsState()
     when (uiState.apiState) {
-        is EventApiState.Loading -> Text("Bezig met laden...")
-        is EventApiState.Success -> ListEvents(events = (uiState.apiState as EventApiState.Success).eventsSuccess)
-        is EventApiState.Error -> Text("Error tijdens ophalen van data")
+        is EventApiState.Loading -> Text(stringResource(id = R.string.loading))
+        is EventApiState.Success -> ListEvents(events = (uiState.apiState as EventApiState.Success).eventsSuccess, onclick)
+        is EventApiState.Error -> Text(stringResource(id = R.string.dataerror))
     }
 
 }
 
 @Composable
-fun ListEvents(events: List<Event>) {
+fun ListEvents(events: List<Event>, onclick: (Event) -> Unit) {
     LazyColumn {
         items(events) { event ->
-            EventCard(event, modifier = Modifier.padding(5.dp))
+            EventCard(event, modifier = Modifier
+                .padding(5.dp)
+                .clickable {
+                    onclick(event)
+                })
         }
     }
 }
@@ -108,40 +116,11 @@ fun EventCard(event: Event, modifier: Modifier = Modifier) {
             Column(
                 Modifier
                     .weight(10f)) {
-                Text(text ="${event.cities}", modifier = modifier.fillMaxWidth() )
+                Text(text = event.cities, modifier = modifier.fillMaxWidth() )
                 Divider()
                 Text(stringResource(R.string.description) + event.description)
             }
         }
 
-    }
-}
-
-@Composable
-fun EventList2 (events: List<Event>, modifier: Modifier = Modifier){
-    LazyColumn() {
-        if (events.isNotEmpty()) {
-            items(events.size) { index ->
-                EventRow(event = events[index])
-            }
-        }
-    }
-}
-
-@Composable
-fun EventRow(event: Event, modifier: Modifier = Modifier) {
-    Row(
-        Modifier
-            .fillMaxWidth()
-            .padding(5.dp)) {
-        Text("#${event.startDateTime}", modifier = Modifier
-            .padding(5.dp))
-        Column(
-            Modifier
-                .padding(5.dp)){
-            Text(text = "${event.cities}", modifier = modifier.fillMaxWidth() )
-            Divider()
-            Text(stringResource(R.string.description) + event.description)
-        }
     }
 }

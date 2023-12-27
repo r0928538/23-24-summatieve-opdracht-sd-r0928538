@@ -30,13 +30,15 @@ import be.svenlysiak.coolevents.ui.AddEventScreen
 import be.svenlysiak.coolevents.ui.CalendarScreen
 import be.svenlysiak.coolevents.ui.LoginScreen
 import be.svenlysiak.coolevents.ui.ProposedScreen
-import be.svenlysiak.coolevents.R
+import be.svenlysiak.coolevents.ui.EventListViewModel
+import be.svenlysiak.coolevents.ui.DetailScreen
 
 enum class EventScreen(@StringRes val title: Int) {
     Start(title = R.string.app_name),
     Calendar(title = R.string.calendar),
     AddEvent(title = R.string.addevent),
-    Proposed(title = R.string.proposed)
+    Proposed(title = R.string.proposed),
+    Detail(title = R.string.detail)
 }
 
 
@@ -84,6 +86,7 @@ fun EventAppBar(
 
 @Composable
 fun CoolEventsApp(navController: NavHostController = rememberNavController()) {
+    val listViewModel = EventListViewModel()
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = EventScreen.valueOf(
         backStackEntry?.destination?.route ?: EventScreen.Start.name
@@ -123,9 +126,16 @@ fun CoolEventsApp(navController: NavHostController = rememberNavController()) {
                     }
                 )
             }
-            composable(route = EventScreen.Calendar.name) {
+            composable(route = EventScreen.Detail.name) {
                 showAddAction = false
-                CalendarScreen()
+                DetailScreen()
+            }
+            composable(route = EventScreen.Calendar.name) {
+                showAddAction = true
+                CalendarScreen(listViewModel, onclick = {
+                    MyConfiguration.selectedEvent = (it)
+                    navController.navigate(EventScreen.Detail.name)
+                })
             }
             composable(route = EventScreen.Proposed.name) {
                 showAddAction = false
@@ -148,5 +158,6 @@ fun navigateUp(navController: NavHostController) {
         //reset loggedinUser
         MyConfiguration.loggedInUser = null
     }
+    MyConfiguration.selectedEvent = null
     navController.navigateUp()
 }
