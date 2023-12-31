@@ -1,5 +1,6 @@
-package be.svenlysiak.coolevents.data
+package be.svenlysiak.coolevents.data.users
 
+import be.svenlysiak.coolevents.data.users.User
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {

@@ -33,6 +33,15 @@ object AppViewModelProvider {
         initializer {
             LoginViewModel(eventsApplication().container.userRepository)
         }
+        initializer {
+            AddEventViewModel(eventsApplication().container.userEventRepository)
+        }
+        initializer {
+            EventListViewModel(eventsApplication().container.userEventRepository)
+        }
+        initializer {
+            DetailViewModel(eventsApplication().container.userEventRepository)
+        }
 }
 
 

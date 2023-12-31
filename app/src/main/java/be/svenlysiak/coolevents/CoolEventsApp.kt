@@ -30,7 +30,6 @@ import be.svenlysiak.coolevents.ui.AddEventScreen
 import be.svenlysiak.coolevents.ui.CalendarScreen
 import be.svenlysiak.coolevents.ui.LoginScreen
 import be.svenlysiak.coolevents.ui.ProposedScreen
-import be.svenlysiak.coolevents.ui.EventListViewModel
 import be.svenlysiak.coolevents.ui.DetailScreen
 
 enum class EventScreen(@StringRes val title: Int) {
@@ -86,7 +85,6 @@ fun EventAppBar(
 
 @Composable
 fun CoolEventsApp(navController: NavHostController = rememberNavController()) {
-    val listViewModel = EventListViewModel()
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = EventScreen.valueOf(
         backStackEntry?.destination?.route ?: EventScreen.Start.name
@@ -128,14 +126,19 @@ fun CoolEventsApp(navController: NavHostController = rememberNavController()) {
             }
             composable(route = EventScreen.Detail.name) {
                 showAddAction = false
-                DetailScreen()
+                DetailScreen(onClick = { resetList(navController)})
             }
             composable(route = EventScreen.Calendar.name) {
-                showAddAction = true
-                CalendarScreen(listViewModel, onclick = {
+                //Only logged in users can add events
+                if(MyConfiguration.loggedInUser != null){
+                    showAddAction = true
+                }
+                CalendarScreen(onclickEvent = {
                     MyConfiguration.selectedEvent = (it)
                     navController.navigate(EventScreen.Detail.name)
-                })
+                },
+                    onclickUserEvent = {MyConfiguration.selectedEvent = (it)
+                        navController.navigate(EventScreen.Detail.name)})
             }
             composable(route = EventScreen.Proposed.name) {
                 showAddAction = false
@@ -143,16 +146,14 @@ fun CoolEventsApp(navController: NavHostController = rememberNavController()) {
             }
             composable(route = EventScreen.AddEvent.name) {
                 showAddAction = false
-                AddEventScreen(onCancelClicked = {navigateUp(navController)}) {
-                    navigateUp(
-                        navController
-                    )
+                AddEventScreen(onCancelClicked = {navigateUp(navController)},
+                    onSaveClicked = { resetList(navController) }) }
                 }
+
             }
         }
-    }
 
-}
+
 fun navigateUp(navController: NavHostController) {
     if (navController.previousBackStackEntry?.destination?.route.equals(EventScreen.Start.name)) {
         //reset loggedinUser
@@ -160,4 +161,9 @@ fun navigateUp(navController: NavHostController) {
     }
     MyConfiguration.selectedEvent = null
     navController.navigateUp()
+}
+
+fun resetList(navController: NavHostController) {
+    navController.navigate(EventScreen.Calendar.name)
+    navController.popBackStack(EventScreen.Calendar.name, false)
 }

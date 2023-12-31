@@ -14,13 +14,6 @@
     <string name="december">December</string>
     <string name="toevoegen">Toevoegen</string>
     <string name="voegEventToe">Voeg event toe</string>
-    <string name="organisator">"Organisator: "</string>
-    <string name="titel">Titel</string>
-    <string name="datum">Datum</string>
-    <string name="plaats">Plaats</string>
-    <string name="eventType">Event type</string>
-    <string name="status">Status</string>
-    <string name="wegmoeilijkheden">Wegmoeilijkheden</string>
     <string name="cancel">Annuleren</string>
     <string name="save">Opslaan</string>
     <string name="login">Log in</string>
@@ -38,7 +31,7 @@
     <string name="registrationsuccess">Registratie voltooid.\nLog in met uw aangemaakte user.</string>
     <string name="welcome">"Hallo, "</string>
     <string name="notloggedin">Niet ingelogd.</string>
-    <string name="description">"Omschrijving: "</string>
+    <string name="descriptionInCard">"Omschrijving: "</string>
     <string name="detail">Detail</string>
     <string name="eventStatus">"Status: "</string>
     <string name="loading">Bezig met laden...</string>
@@ -47,5 +40,17 @@
     <string name="hindrance">"Wegmoeilijkheden: "</string>
     <string name="yes">ja</string>
     <string name="no">nee</string>
+    <string name="eventType">Event type</string>
+    <string name="description">Omschrijving</string>
+    <string name="plaats">Plaats</string>
+    <string name="owner">"Organisator: "</string>
+    <string name="day">Dag</string>
+    <string name="month">Maand</string>
+    <string name="year">Jaar</string>
+    <string name="startdate">Startdatum</string>
+    <string name="enddate">Einddatum</string>
+    <string name="yourEvents">Jouw events:</string>
+    <string name="officialEvents">Officiële events:</string>
+    <string name="delete">Verwijder</string>
 
 </resources>

@@ -20,7 +20,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import be.svenlysiak.coolevents.R
-import be.svenlysiak.coolevents.data.MyConfiguration
 
 @Composable
 fun LoginScreen(loginViewModel: LoginViewModel = viewModel(factory = AppViewModelProvider.Factory), loginSuccess: () -> Unit,
@@ -38,7 +37,7 @@ fun LoginScreen(loginViewModel: LoginViewModel = viewModel(factory = AppViewMode
             Spacer(Modifier.height(10.dp))
             Row {
                 LoginButton {
-                    loginViewModel.debug(loginSuccess)
+                    loginViewModel.login(loginSuccess)
 
                 }
                 RegistrationButton() {

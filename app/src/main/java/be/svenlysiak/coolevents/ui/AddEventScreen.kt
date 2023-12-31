@@ -4,11 +4,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Switch
+import androidx.compose.material3.Divider
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -16,34 +18,33 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.core.text.isDigitsOnly
+import androidx.lifecycle.viewmodel.compose.viewModel
 import be.svenlysiak.coolevents.R
-import be.svenlysiak.coolevents.models.Event
-import be.svenlysiak.coolevents.data.User
 import be.svenlysiak.coolevents.utils.DetailText
-import be.svenlysiak.coolevents.utils.MockupUser
-import java.util.Date
 
 @Composable
-fun AddEventScreen(
-    modifier: Modifier = Modifier,
-    onCancelClicked: () -> Unit,
-    onSaveCLicked: () -> Unit
+fun AddEventScreen(modifier: Modifier = Modifier,
+                   addEventViewModel: AddEventViewModel = viewModel(factory = AppViewModelProvider.Factory),
+                   onCancelClicked: () -> Unit,
+                   onSaveClicked: () -> Unit
 ) {
-    var organisator by remember { mutableStateOf("")}
-    var titel by remember { mutableStateOf("")}
-    var plaats by remember {mutableStateOf ("")}
-    var eventType by remember {mutableStateOf ("")}
-    var status by remember {mutableStateOf ("")}
-    var wegmoeilijkheden by remember {mutableStateOf (false)}
-    //ToDo -> not statefull -> when recomposition happens, a new ToDO object is created with the entered fields
-    /*var event =
-        Event(organisator, titel, Date(), plaats, eventType, status, wegmoeilijkheden)
-*/
+    var eventType by remember { mutableStateOf("")}
+    var description by remember {mutableStateOf ("")}
+    var cities by remember {mutableStateOf ("")}
+
+    var startDay by remember {mutableStateOf ("")}
+    var startMonth by remember {mutableStateOf ("")}
+    var startYear by remember {mutableStateOf ("")}
+
+    var endDay by remember {mutableStateOf ("")}
+    var endMonth by remember {mutableStateOf ("")}
+    var endYear by remember {mutableStateOf ("")}
+
     Column(modifier = Modifier
         .verticalScroll(rememberScrollState())
         .padding(10.dp)) {
@@ -54,98 +55,153 @@ fun AddEventScreen(
         ) {
             DetailText(text = (stringResource(R.string.voegEventToe)))
         }
-        Row(modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp)){
-            DropdownListUser()
-        }
-        SingleLineEditField(titel, {titel = it}, label = stringResource(id = R.string.titel))
-        SingleLineEditField(plaats, {plaats = it}, label = stringResource(id = R.string.plaats))
         SingleLineEditField(eventType, {eventType = it}, label = stringResource(id = R.string.eventType))
-        SingleLineEditField(status, {status = it}, label = stringResource(id = R.string.status))
-        EditSwitch(text = stringResource(R.string.wegmoeilijkheden), checked = wegmoeilijkheden, onValueChange = {wegmoeilijkheden = it})
-        //SaveCancelButton(event = event)
+        SingleLineEditField(cities, {cities = it}, label = stringResource(id = R.string.plaats))
+        DescriptonTextField(description = description, {description = it})
+
+        Text(stringResource(id = R.string.startdate))
+        Row(){
+            NumberEditField(value = startDay, onValueChange =
+            {
+                if (it != "") {
+                    if (it.isDigitsOnly()) {
+                        if ((it.length <= 2).and(it.toInt() <= 31).and(it.toInt() > 0)) {
+                            startDay = it
+                        }
+                    }
+                }
+            },
+                label = stringResource(
+                id = R.string.day
+            ))
+            NumberEditField(value = startMonth, onValueChange =
+            {
+                if (it != "") {
+                    if (it.isDigitsOnly()) {
+                        if ((it.length <= 2).and(it.toInt() <= 12).and(it.toInt() > 0)) {
+                            startMonth = it
+                        }
+                    }
+                }
+            },
+                label = stringResource(
+                id = R.string.month
+            ))
+            NumberEditField(value = startYear, onValueChange =
+            {if (it != "") {
+                if (it.isDigitsOnly()) {
+                    if ((it.length <= 4).and(it.toInt() > 0)) {
+                        startYear = it
+                    }
+                }
+            }
+            },
+                label = stringResource(
+                id = R.string.year
+            ))
+        }
+        Divider()
+
+        Text(stringResource(id = R.string.enddate))
+        Row(){
+            NumberEditField(value = endDay, onValueChange =
+            {if (it != "") {
+                if (it.isDigitsOnly()) {
+                    if ((it.length <= 2).and(it.toInt() <= 31).and(it.toInt() > 0)) {
+                        endDay = it
+                    }
+                }
+            }
+            },
+                label = stringResource(
+                    id = R.string.day
+                ))
+            NumberEditField(value = endMonth, onValueChange =
+            {if (it != "") {
+                if (it.isDigitsOnly()) {
+                    if ((it.length <= 2).and(it.toInt() <= 12).and(it.toInt() > 0)) {
+                        endMonth = it
+                    }
+                }
+            }
+            },
+                label = stringResource(
+                    id = R.string.month
+                ))
+            NumberEditField(value = endYear, onValueChange =
+            {if (it != "") {
+                if (it.isDigitsOnly()) {
+                    if ((it.length <= 4).and(it.toInt() > 0)) {
+                        endYear = it
+                    }
+                }
+            }
+            },
+                label = stringResource(
+                    id = R.string.year
+                ))
+        }
+        Divider()
+
+        Row(){
+            SaveButton(onSaveClick = {
+                addEventViewModel.saveEvent(
+                    eventType, description,
+                    startDay, startMonth, startYear,
+                    endDay, endMonth, endYear,
+                    cities
+                )
+                onSaveClicked()
+            }
+            )
+            CancelButton(onCancelClick = onCancelClicked)
+        }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropdownListUser() {
-    val users = MockupUser.getUsers()
-    var expanded by remember {
-        mutableStateOf(false)
-    }
-    var user by remember {
-        mutableStateOf<User?>(null)
-    }
-    Column {
-        TextField(
-            value = user?.username ?: "",
-            label = {Text(stringResource(R.string.organisator))},
-            onValueChange = {
-                expanded = true
-            },
-            modifier = Modifier
-                .onFocusChanged {
-                    expanded = it.hasFocus
-                }
-                .padding(top = 5.dp)
-                .fillMaxWidth()
-        )
-        /*DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            for (u in users) {
-                DropdownMenuItem(text = { Text(u.username) }, onClick = {
-                    user = u
-                    expanded = false
-                })
-            }
-        }*/
-    }
+fun NumberEditField(value: String, onValueChange: (String) -> Unit, label : String,  modifier: Modifier = Modifier) {
+    TextField(value = value, onValueChange = onValueChange,
+        label = { Text(label)},
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        singleLine = true, modifier = modifier
+            .padding(top = 5.dp)
+            .width(125.dp))
 }
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun SingleLineEditField(value: String, onValueChange: (String) -> Unit, label : String,  modifier: Modifier = Modifier) {
     TextField(value = value, onValueChange = onValueChange, label = { Text(label)}, singleLine = true, modifier = modifier
         .fillMaxWidth()
         .padding(top = 5.dp))
 }
+
 @Composable
-fun EditSwitch(text: String, checked: Boolean, onValueChange: (Boolean) -> Unit,  modifier: Modifier = Modifier) {
-    Row{
-        Column (
-            modifier
-                .weight(2f)
-                .align(alignment = Alignment.CenterVertically)) {
-            Text(text = text,
-                modifier
-                    .align(alignment = Alignment.End)
-                    .padding(10.dp))
-        }
-        Column (modifier.weight(1f)){
-            Switch(checked = checked, onCheckedChange = onValueChange)
-        }
-    }
+fun DescriptonTextField(description: String, onValueChange: (String) -> Unit, modifier: Modifier = Modifier) {
+    OutlinedTextField(
+        value = description,
+        onValueChange = onValueChange,
+        minLines = 5,
+        maxLines = 5,
+        label = {Text(stringResource(R.string.description))},
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 5.dp))
 }
 
 @Composable
-fun SaveCancelButton(event: Event, modifier: Modifier = Modifier) {
-    Row(modifier = modifier
-        .fillMaxWidth()
-        .padding(horizontal = 50.dp)) {
-        Button(onClick = {
-            //nothing
-        }, modifier = Modifier
-            .weight(1f)
-            .padding(10.dp) ) {
-            Text(stringResource(R.string.cancel))
-        }
-        Button(onClick = {
-            //save
-        }, modifier = Modifier
-            .weight(1f)
+fun SaveButton(onSaveClick: () -> Unit, modifier: Modifier = Modifier) {
+        Button(onClick = onSaveClick,
+            modifier = Modifier
             .padding(10.dp)) {
             Text(stringResource(R.string.save))
         }
-    }
+}
 
+@Composable
+fun CancelButton(onCancelClick: () -> Unit, modifier: Modifier = Modifier) {
+    Button(onClick = onCancelClick, modifier = Modifier
+        .padding(10.dp) ) {
+        Text(stringResource(R.string.cancel))
+    }
 }

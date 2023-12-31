@@ -1,4 +1,4 @@
-package be.svenlysiak.coolevents.data
+package be.svenlysiak.coolevents.data.users
 
 import kotlinx.coroutines.flow.Flow
 

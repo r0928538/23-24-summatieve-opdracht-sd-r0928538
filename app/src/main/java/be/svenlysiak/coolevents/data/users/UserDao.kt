@@ -1,4 +1,4 @@
-package be.svenlysiak.coolevents.data
+package be.svenlysiak.coolevents.data.users
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -6,7 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import be.svenlysiak.coolevents.data.User
+import be.svenlysiak.coolevents.data.users.User
 import kotlinx.coroutines.flow.Flow
 
 @Dao

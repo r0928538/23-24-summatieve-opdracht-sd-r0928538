@@ -6,12 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import be.svenlysiak.coolevents.data.MyConfiguration
-import be.svenlysiak.coolevents.data.MyConfiguration.Companion.loggedInUser
-import be.svenlysiak.coolevents.data.User
-import be.svenlysiak.coolevents.data.UserRepository
+import be.svenlysiak.coolevents.data.users.User
+import be.svenlysiak.coolevents.data.users.UserRepository
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 
 class LoginViewModel(private val repository: UserRepository) : ViewModel() {
@@ -29,7 +26,7 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
         this.password = password
     }
 
-    fun debug(loginSuccess: () -> Unit){
+    fun login(loginSuccess: () -> Unit){
         viewModelScope.launch() {
             if (!repository.getUserStream(username, password).first().isEmpty()) {
                 val user1 = User(username, password)
@@ -37,22 +34,6 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
                 if (MyConfiguration.loggedInUser != null) {
                     loginSuccess()
                 }
-            }
-        }
-    }
-
-    fun login() {
-        viewModelScope.launch(){
-            if(repository.getUserStream(username, password).toList().isNotEmpty()){
-                val user1 = User(username, password)
-                MyConfiguration.loggedInUser = user1
-                password = ""
-                username = ""
-            }
-            else{
-                MyConfiguration.loggedInUser = repository.getAllUsersStream().first().first()
-                    password = ""
-                    username = ""
             }
         }
     }
@@ -69,18 +50,4 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
     private fun validateInput(): Boolean{
         return username!=""
     }
-
-    /*
-    suspend fun saveItem() {
-        if (validateInput()) {
-            itemsRepository.insertItem(itemUiState.itemDetails.toItem())
-        }
-    }
-
-    private fun validateInput(uiState: ItemDetails = itemUiState.itemDetails): Boolean {
-        return with(uiState) {
-            name.isNotBlank() && price.isNotBlank() && quantity.isNotBlank()
-        }
-    }
-     */
 }

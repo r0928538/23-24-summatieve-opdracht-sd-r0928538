@@ -1,6 +1,6 @@
 package be.svenlysiak.coolevents.utils
 
-import be.svenlysiak.coolevents.data.User
+import be.svenlysiak.coolevents.data.users.User
 
 class MockupUser {
     companion object {
