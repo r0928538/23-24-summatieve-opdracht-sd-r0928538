@@ -12,5 +12,5 @@ interface UserRepository {
 
     suspend fun deleteUser(user: User)
 
-    suspend fun updateItem(user: User)
+    suspend fun updateUser(user: User)
 }

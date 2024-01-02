@@ -1,5 +1,6 @@
 package be.svenlysiak.coolevents.ui
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -45,7 +47,10 @@ fun AddEventScreen(modifier: Modifier = Modifier,
     var endMonth by remember {mutableStateOf ("")}
     var endYear by remember {mutableStateOf ("")}
 
-    Column(modifier = Modifier
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
         .verticalScroll(rememberScrollState())
         .padding(10.dp)) {
         Row(
@@ -53,13 +58,13 @@ fun AddEventScreen(modifier: Modifier = Modifier,
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)
         ) {
-            DetailText(text = (stringResource(R.string.voegEventToe)))
+            DetailText(text = (stringResource(R.string.addEvent)))
         }
         SingleLineEditField(eventType, {eventType = it}, label = stringResource(id = R.string.eventType))
-        SingleLineEditField(cities, {cities = it}, label = stringResource(id = R.string.plaats))
+        SingleLineEditField(cities, {cities = it}, label = stringResource(id = R.string.place))
         DescriptonTextField(description = description, {description = it})
 
-        Text(stringResource(id = R.string.startdate))
+        Text(stringResource(id = R.string.startDate))
         Row(){
             NumberEditField(value = startDay, onValueChange =
             {
@@ -102,7 +107,7 @@ fun AddEventScreen(modifier: Modifier = Modifier,
         }
         Divider()
 
-        Text(stringResource(id = R.string.enddate))
+        Text(stringResource(id = R.string.endDate))
         Row(){
             NumberEditField(value = endDay, onValueChange =
             {if (it != "") {

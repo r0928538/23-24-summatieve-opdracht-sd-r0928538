@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -27,16 +28,16 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import be.svenlysiak.coolevents.data.MyConfiguration
 import be.svenlysiak.coolevents.ui.AddEventScreen
-import be.svenlysiak.coolevents.ui.CalendarScreen
+import be.svenlysiak.coolevents.ui.ListScreen
 import be.svenlysiak.coolevents.ui.LoginScreen
-import be.svenlysiak.coolevents.ui.ProposedScreen
+import be.svenlysiak.coolevents.ui.SettingsScreen
 import be.svenlysiak.coolevents.ui.DetailScreen
 
 enum class EventScreen(@StringRes val title: Int) {
     Start(title = R.string.app_name),
     Calendar(title = R.string.calendar),
-    AddEvent(title = R.string.addevent),
-    Proposed(title = R.string.proposed),
+    AddEvent(title = R.string.addEvent),
+    Settings(title = R.string.settings),
     Detail(title = R.string.detail)
 }
 
@@ -48,7 +49,9 @@ fun EventAppBar(
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     showAddAction: Boolean,
+    showSettings: Boolean,
     navigateToAddEvent: () -> Unit,
+    navigateToSettings: () -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -78,6 +81,16 @@ fun EventAppBar(
                     )
                 }
             }
+            if (showSettings) {
+                IconButton(onClick =
+                navigateToSettings
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Settings,
+                        contentDescription = "Settings"
+                    )
+                }
+            }
         }
     )
 }
@@ -90,6 +103,9 @@ fun CoolEventsApp(navController: NavHostController = rememberNavController()) {
         backStackEntry?.destination?.route ?: EventScreen.Start.name
     )
     var showAddAction by remember {
+        mutableStateOf(false)
+    }
+    var showSettings by remember {
         mutableStateOf(false)
     }
     Scaffold(
@@ -106,6 +122,10 @@ fun CoolEventsApp(navController: NavHostController = rememberNavController()) {
                 showAddAction = showAddAction,
                 navigateToAddEvent = {
                     navController.navigate(EventScreen.AddEvent.name)
+                },
+                showSettings = showSettings,
+                navigateToSettings = {
+                    navController.navigate(EventScreen.Settings.name)
                 }
             )
         }
@@ -118,6 +138,7 @@ fun CoolEventsApp(navController: NavHostController = rememberNavController()) {
         ) {
             composable(route = EventScreen.Start.name) {
                 showAddAction = false
+                showSettings = false
                 LoginScreen(
                     loginSuccess = {
                         navController.navigate(EventScreen.Calendar.name)
@@ -126,26 +147,34 @@ fun CoolEventsApp(navController: NavHostController = rememberNavController()) {
             }
             composable(route = EventScreen.Detail.name) {
                 showAddAction = false
+                showSettings = false
                 DetailScreen(onClick = { resetList(navController)})
             }
             composable(route = EventScreen.Calendar.name) {
                 //Only logged in users can add events
                 if(MyConfiguration.loggedInUser != null){
                     showAddAction = true
+                    showSettings = true
                 }
-                CalendarScreen(onclickEvent = {
+                ListScreen(onclickEvent = {
                     MyConfiguration.selectedEvent = (it)
                     navController.navigate(EventScreen.Detail.name)
                 },
                     onclickUserEvent = {MyConfiguration.selectedEvent = (it)
                         navController.navigate(EventScreen.Detail.name)})
             }
-            composable(route = EventScreen.Proposed.name) {
+            composable(route = EventScreen.Settings.name) {
                 showAddAction = false
-                ProposedScreen()
+                showSettings = false
+                SettingsScreen(
+                    onClickDelete = {navController.popBackStack(EventScreen.Start.name, true)
+                    navController.navigate(EventScreen.Start.name)},
+                    onClickCity = { resetList(navController) }
+                )
             }
             composable(route = EventScreen.AddEvent.name) {
                 showAddAction = false
+                showSettings = false
                 AddEventScreen(onCancelClicked = {navigateUp(navController)},
                     onSaveClicked = { resetList(navController) }) }
                 }

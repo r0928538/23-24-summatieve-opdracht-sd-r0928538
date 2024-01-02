@@ -13,9 +13,9 @@ import be.svenlysiak.coolevents.data.userEvents.UserEventRepository
 import be.svenlysiak.coolevents.models.Event
 import be.svenlysiak.coolevents.network.EventApi
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.toList
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import kotlin.math.abs
 
 
 class EventListViewModel(private val repository: UserEventRepository) : ViewModel() {
@@ -30,6 +30,22 @@ class EventListViewModel(private val repository: UserEventRepository) : ViewMode
             try {
                 val response = EventApi.eventService.getEventList()
                 val eventList = ArrayList<Event>()
+
+
+                var filterCity = false
+                var latitude = 0.0
+                var longtitude = 0.0
+
+                if(MyConfiguration.loggedInUser != null){
+                    if(MyConfiguration.loggedInUser!!.city != ""){
+                        filterCity = true
+                        val eventInCity = response.find { it.cities.contains(MyConfiguration.loggedInUser!!.city)}
+                            if(eventInCity != null){
+                            latitude = eventInCity.coordinate.coordinates[0]
+                            longtitude = eventInCity.coordinate.coordinates[1]
+                        }
+                    }
+                }
                 val readingFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
                 for (event in response) {
                     val eventStartDateToDate =
@@ -37,17 +53,21 @@ class EventListViewModel(private val repository: UserEventRepository) : ViewMode
                     val eventEndDateToDate =
                         LocalDate.parse(event.startDateTime.substring(0, 10), readingFormatter)
                     if (eventEndDateToDate >= LocalDate.now()) {
-                        eventList.add(
-                            Event(
-                                event.recurrencePattern.toString().split("duur").first(),
-                                event.eventType, event.status, event.owner,
-                                event.description.trim(),
-                                eventStartDateToDate,
-                                eventEndDateToDate,
-                                event.importantHindrance,
-                                event.cities.toString().replace("[", "").replace("]", "")
+                        if(!filterCity || (abs(latitude - event.coordinate.coordinates[0]) < 0.15 && abs(longtitude - event.coordinate.coordinates[1]) < 0.15)) {
+                            eventList.add(
+                                Event(
+                                    event.recurrencePattern.toString().split("duur").first(),
+                                    event.eventType, event.status, event.owner,
+                                    event.description.trim(),
+                                    eventStartDateToDate,
+                                    eventEndDateToDate,
+                                    event.importantHindrance,
+                                    event.cities.toString().replace("[", "").replace("]", ""),
+                                    event.coordinate.coordinates[0],
+                                    event.coordinate.coordinates[1]
+                                )
                             )
-                        )
+                        }
                     }
                 }
                 _uistate.update {

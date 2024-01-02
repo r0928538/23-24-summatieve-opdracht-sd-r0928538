@@ -29,7 +29,7 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
     fun login(loginSuccess: () -> Unit){
         viewModelScope.launch() {
             if (!repository.getUserStream(username, password).first().isEmpty()) {
-                val user1 = User(username, password)
+                val user1 = repository.getUserStream(username, password).first().first()
                 MyConfiguration.loggedInUser = user1
                 if (MyConfiguration.loggedInUser != null) {
                     loginSuccess()
@@ -41,13 +41,13 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
     fun register(){
         viewModelScope.launch() {
             if (validateInput()) {
-                val user = User(username, password)
+                val user = User(username, password, "")
                 repository.insertUser(user)
             }
         }
     }
 
-    private fun validateInput(): Boolean{
+    fun validateInput(): Boolean{
         return username!=""
     }
 }

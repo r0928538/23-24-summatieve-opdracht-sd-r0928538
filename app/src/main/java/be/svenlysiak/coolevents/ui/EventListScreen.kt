@@ -15,30 +15,27 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import be.svenlysiak.coolevents.R
-import be.svenlysiak.coolevents.data.CalendarEventUIState
 import be.svenlysiak.coolevents.data.EventApiState
 import be.svenlysiak.coolevents.data.MyConfiguration
 import be.svenlysiak.coolevents.data.userEvents.UserEvent
 import be.svenlysiak.coolevents.models.Event
 import be.svenlysiak.coolevents.utils.DetailText
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.launch
 
 
 @Composable
-fun CalendarScreen(modifier: Modifier = Modifier,
-                   listEventViewModel: EventListViewModel = viewModel(factory = AppViewModelProvider.Factory),
-                   onclickEvent: (Event) -> Unit,
-                   onclickUserEvent: (UserEvent) -> Unit) {
+fun ListScreen(modifier: Modifier = Modifier,
+               listEventViewModel: EventListViewModel = viewModel(factory = AppViewModelProvider.Factory),
+               onclickEvent: (Event) -> Unit,
+               onclickUserEvent: (UserEvent) -> Unit) {
+
     Column {
         TodayDateText()
         WhoLoggedInText()
@@ -56,7 +53,7 @@ fun WhoLoggedInText(modifier : Modifier = Modifier){
             Text(stringResource(R.string.welcome) + MyConfiguration.loggedInUser?.username.toString())
         }
         else{
-            Text(stringResource(R.string.notloggedin))
+            Text(stringResource(R.string.notLoggedIn))
         }
     }
 }
@@ -69,16 +66,16 @@ fun TodayDateText(modifier : Modifier = Modifier){
         today += cal.get(Calendar.DAY_OF_MONTH)
         today += " "
         when (cal.get(Calendar.MONTH) + 1) {
-            1 -> today += (stringResource(R.string.januari))
-            2 -> today += (stringResource(R.string.februari))
-            3 -> today += (stringResource(R.string.maart))
+            1 -> today += (stringResource(R.string.january))
+            2 -> today += (stringResource(R.string.february))
+            3 -> today += (stringResource(R.string.march))
             4 -> today += (stringResource(R.string.april))
-            5 -> today += (stringResource(R.string.mei))
-            6 -> today += (stringResource(R.string.juni))
-            7 -> today += (stringResource(R.string.juli))
+            5 -> today += (stringResource(R.string.may))
+            6 -> today += (stringResource(R.string.june))
+            7 -> today += (stringResource(R.string.july))
             8 -> today += (stringResource(R.string.augustus))
             9 -> today += (stringResource(R.string.september))
-            10 -> today += (stringResource(R.string.oktober))
+            10 -> today += (stringResource(R.string.october))
             11 -> today += (stringResource(R.string.november))
             12 -> today += (stringResource(R.string.december))
         }
@@ -97,7 +94,7 @@ fun EventState(listEventViewModel: EventListViewModel, modifier : Modifier = Mod
         is EventApiState.Success -> ListEvents(events =
         (uiState.apiState as EventApiState.Success).eventsSuccess,
             onclickEvent, userEvents = uiState.userEvents, onclickUserEvent)
-        is EventApiState.Error -> Text(stringResource(id = R.string.dataerror))
+        is EventApiState.Error -> Text(stringResource(id = R.string.dataError))
     }
 
 }

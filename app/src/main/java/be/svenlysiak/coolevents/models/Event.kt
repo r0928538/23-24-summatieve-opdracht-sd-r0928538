@@ -11,5 +11,7 @@ data class Event(
     val startDateTime: LocalDate,
     val endDateTime: LocalDate,
     val importantHindrance: Boolean,
-    val cities: String
+    val cities: String,
+    val coordinateLatitude: Double,
+    val coordinateLongtitude: Double
 )

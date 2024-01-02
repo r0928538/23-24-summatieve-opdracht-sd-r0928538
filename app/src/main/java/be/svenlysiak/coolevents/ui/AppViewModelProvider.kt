@@ -42,6 +42,9 @@ object AppViewModelProvider {
         initializer {
             DetailViewModel(eventsApplication().container.userEventRepository)
         }
+        initializer {
+            SettingsViewModel(eventsApplication().container.userRepository)
+        }
 }
 
 
